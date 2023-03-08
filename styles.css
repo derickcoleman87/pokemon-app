@@ -1,4 +1,33 @@
-.pokemon-container {
-  padding: 0;
+body {
+  background-color: rgb(198, 243, 255);
+}
+
+.all-pokemon-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.single-pokemon-container {
+  padding: 20px;
   border: 1px solid lightgray;
+  margin: 20px;
+  border-radius: 20px;
+  box-shadow: 1px 1px 10px darkgray;
+  border: 1px solid yellow;
+  background-color: white;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  color: blue;
+  margin: 20px 0px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.page-numbers {
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
