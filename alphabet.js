@@ -22,26 +22,52 @@ fetch("https://pokeapi.co/api/v2/pokemon?limit=1281")
     }
   });
 
-function addPokemonToUi(pokemon) {
-  fetch(pokemon.url)
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (pokemonData) {
-      let pokemonDiv = document.createElement("div");
-      pokemonDiv.className = "single-pokemon-container";
+async function getInitialData() {
+  try {
+    let response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1281");
+    let data = await response.json();
+    let letters = document.querySelectorAll("li");
 
-      let nameH1 = document.createElement("h1");
-      nameH1.innerText = pokemon.name;
-      pokemonDiv.append(nameH1);
+    for (let i = 0; i < letters.length; i++) {
+      let currentLetterDomNode = letters[i];
+      let currentLetter = currentLetterDomNode.textContent;
+      // console.log(currentLetter);
+      currentLetterDomNode.addEventListener("click", () => {
+        clearAllPokemonContainer();
+        // show pokemon that start with that letter
+        for (let j = 0; j < data.results.length; j++) {
+          let pokemon = data.results[j];
+          // console.log(pokemon);
+          if (pokemon.name.toUpperCase().startsWith(currentLetter)) {
+            addPokemonToUi(pokemon);
+          }
+        }
+      });
+    }
+  } catch (err) {}
+}
 
-      let img = document.createElement("img");
-      img.src = pokemonData.sprites.front_default;
-      img.alt = pokemonData.name;
-      pokemonDiv.append(img);
+async function addPokemonToUi(pokemon) {
+  try {
+    let response = await fetch(pokemon.url);
+    let pokemonData = await response.json();
 
-      document.querySelector(".all-pokemon-container").append(pokemonDiv);
-    });
+    let pokemonDiv = document.createElement("div");
+    pokemonDiv.className = "single-pokemon-container";
+
+    let nameH1 = document.createElement("h1");
+    nameH1.innerText = pokemon.name;
+    pokemonDiv.append(nameH1);
+
+    let img = document.createElement("img");
+    img.src = pokemonData.sprites.front_default;
+    img.alt = pokemonData.name;
+    pokemonDiv.append(img);
+
+    document.querySelector(".all-pokemon-container").append(pokemonDiv);
+  } catch (err) {
+    // do something with error - display the error message
+  }
 }
 
 function clearAllPokemonContainer() {
@@ -82,3 +108,5 @@ fetch("https://pokeapi.co/api/v2/pokemon?limit=1281")
     }
   });
 // }
+
+getInitialData();
